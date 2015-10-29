@@ -17,14 +17,14 @@ p {font-family:"Verdana";font-weight:normal;color:black;font-size:9pt;margin-top
 </style>
 </head>
 <body>
-<h1>Pyyntö ei ole hyvä</h1>
+<h1>Pyyntö ei kelpaa</h1>
 <h2><?php echo nl2br(CHtml::encode($data['message'])); ?></h2>
 <p>
 Palvelin ei voinut käsitellä pyyntöä virheellisen syntaksin johdosta.
 Älä toista pyyntöä ilman muutoksia.
 </p>
 <p>
-Mikäli uskot tämän olevan palvelimen virhe, ota yhteyttä <?php echo $data['admin']; ?>.
+Jos uskot tämän olevan palvelimen virhe, ota yhteyttä <?php echo $data['admin']; ?>.
 </p>
 <div class="version">
 <?php echo date('Y-m-d H:i:s',$data['time']) .' '. $data['version']; ?>
