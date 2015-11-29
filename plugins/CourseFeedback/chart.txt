@@ -1,0 +1,88 @@
+		<script type="text/javascript">
+			var chart;
+			$(document).ready(function () {
+			    chart = new Highcharts.Chart({
+				chart: {
+			            renderTo: 'container',
+			            defaultSeriesType: 'spline',
+			            events: {
+			                load: requestData
+			            }
+			        },			    	
+			        title: {
+			            text: 'Monthly Average',
+			            x: -20 //center
+			        },
+			        exporting: {
+            			enabled: false
+        			},
+			        xAxis: {
+			            categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+			                'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+			        },
+			        yAxis: {
+			            title: {
+			                text: 'Answer'
+			            },
+			            plotLines: [{
+			                value: 0,
+			                width: 1,
+			                color: '#808080'
+			            }]
+			        },
+			        tooltip: {
+			            valueSuffix: 'rep'
+			        },
+			        legend: {
+			            layout: 'vertical',
+			            align: 'right',
+			            verticalAlign: 'middle',
+			            borderWidth: 0
+			        },
+			        series: [{
+			            name: 'A1',
+			            data: []
+			        }, {
+			            name: 'A2',
+			            data: []
+			        }]
+			    });
+			});
+
+			function requestData() {
+			    var urli = 'http://vm.legitsoft.org/~janux/cf/cftest.php?id=' + doge;
+			    $.ajax({
+			        url: urli,
+			        success: function(point) {
+			            var series = chart.series[0],
+			                shift = series.data.length > 20;
+			            //chart.series[0].addPoint(point, true, shift);
+			            //setTimeout(requestData, 1000);
+			            var json = JSON.parse(point);     
+			            console.log(json);
+				    var stuff = [0,0,0,0,0,0,0,0,0,0,0,0];
+			            for (index=0; index<json.length; index++) {
+    						var obj = json[index];
+    						for (var p in obj) {
+    							if(obj.hasOwnProperty(p)) {    								
+    								if(p === 'submitdate') {
+    									//console.log(obj[p]);
+									var timestamp = obj[p];
+									var t = timestamp.split(/[- :]/);
+									var test = new Date(t[0], t[1], t[2], t[3], t[4], t[5]);
+									//console.log(chart.series[0].data);
+									stuff[test.getMonth()-1] += 1;
+    								}    							
+    							}
+    						}
+				    }
+				    console.log(stuff);
+				    chart.series[0].setData(stuff);//.addPoint(stuff, true, shift);
+			        },
+			        cache: false
+			    });
+			}			
+		</script>
+		<div id="container" style="height: 400px; min-width: 310px"></div>
+		<br />
+
